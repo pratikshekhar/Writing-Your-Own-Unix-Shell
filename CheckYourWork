@@ -1,0 +1,25 @@
+You can run the shell driver on your shell using trace file trace01.txt (for instance) by typing:
+
+unix>./sdriver.pl -t trace01.txt -s ./tsh -a "-p" (the -a "-p" argument tells your shell not to emit a prompt), or
+unix>make test01 
+Similarly, to compare your result with the reference shell, you can run the trace driver on the reference shell by typing:
+unix>./sdriver.pl -t trace01.txt -s ./tshref -a "-p" or
+unix>make rtest01 
+For your reference, tshref.out gives the output of the reference solution on all races. This might be more convenient for you than manually running the shell driver on all trace files.
+The neat thing about the trace files is that they generate the same output you would have gotten had you run your shell interactively (except for an initial comment that identifies the trace).  For example:
+
+bass> make test15 ./sdriver.pl -t trace15.txt -s ./tsh -a "-p" 
+# # trace15.txt - Putting it all together # 
+tsh> ./bogus ./bogus: Command not found. 
+tsh> ./myspin 10 Job (9721) terminated by signal 2 
+tsh> ./myspin 3 & [1] (9723) ./myspin 3 & 
+tsh> ./myspin 4 & [2] (9725) ./myspin 4 & 
+tsh> jobs [1] (9723) Running    ./myspin 3 & [2] (9725) Running    ./myspin 4 & 
+tsh> fg Job [1] (9723) stopped by signal 20 
+tsh> jobs [1] (9723) Stopped    ./myspin 3 & [2] (9725) Running    ./myspin 4 & 
+tsh> bg 
+tsh> bg [1] (9723) ./myspin 3 & 
+tsh> jobs [1] (9723) Running    ./myspin 3 & [2] (9725) Running    ./myspin 4 & 
+tsh> fg 
+tsh> quit bass>
+
